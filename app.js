@@ -1,8 +1,26 @@
 const express = require("express");
 const app = express();
+const path = require('path');
 const port = process.env.PORT || 3001;
 
 app.get("/", (req, res) => res.type('html').send(html));
+
+app.get('/.well-known/acme-challenge/hNlJQcr0zvv8YCbAiOspFTowQhLxjknv3AfPrcXhSO0', (req, res) => {
+  // Aquí debes enviar el contenido del archivo que deseas que esté accesible en el endpoint
+  // Puedes leer el contenido de un archivo y enviarlo como respuesta
+  // Por ejemplo, usando el módulo 'fs'
+  const fs = require('fs');
+  const filePath = path.join(__dirname, 'verify');  ; // Ruta al archivo que deseas subir
+
+  fs.readFile(filePath, 'utf8', (err, data) => {
+      if (err) {
+          console.error(err);
+          res.status(500).send('Error interno del servidor');
+      } else {
+          res.send(data);
+      }
+  });
+});
 
 const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
